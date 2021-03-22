@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Pagination} from "../components/Pagination";
-import axios from "axios";
+import customersApi from "../services/customersApi";
 
 export const CustomersPage = props => {
 
@@ -9,9 +9,7 @@ export const CustomersPage = props => {
     const [search, setSearch] = useState("");
 
     useEffect(() => {
-        axios
-            .get("http://localhost:8000/api/customers")
-            .then(response => response.data["hydra:member"])
+        customersApi.findAll()
             .then(data => setCustomers(data))
             .catch(error => console.log(error.response))
     }, [])
@@ -27,7 +25,7 @@ export const CustomersPage = props => {
             si catch alors on remet le réinitialise customers comme avant, on fait ça pour des questions de rapidité
             au niveau du chargement de la page
          */
-        axios.delete("http://localhost:8000/api/customers/" + id)
+        customersApi.delete(id)
             .then(response => console.log("OK"))
             .catch(error => setCustomers(originalCustomers))
     };

@@ -8,6 +8,7 @@ import './css/app.css';
 import './bootstrap';
 import {CustomersPageWithPagination} from "./js/pages/CustomersPageWithPagination";
 import {CustomersPage} from "./js/pages/CustomersPage";
+import InvoicesPage from "./js/pages/InvoicesPage";
 
 console.log("Hello World !!!")
 
@@ -17,6 +18,7 @@ const App = () => {
             <Navbar/>
             <main className="container pt-5">
                 <Switch>
+                    <Route path="/invoices" component={InvoicesPage} />
                     <Route path="/customers" component={CustomersPage} />
                     <Route path="/" component={HomePage} />
                 </Switch>
