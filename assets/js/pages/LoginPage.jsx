@@ -1,6 +1,7 @@
 import React, {useState, useContext} from 'react';
 import authApi from "../services/authApi";
 import AuthContext from "../contexts/AuthContext";
+import Field from "../components/forms/Field";
 
 const LoginPage = ({history}) => {
 
@@ -40,17 +41,10 @@ const LoginPage = ({history}) => {
             <h1>Connexion à l'application</h1>
 
             <form onSubmit={handleSubmit}>
-                <div className="from-group">
-                    <label htmlFor="username"></label>
-                    <input value={credentials.username} type="email" placeholder="Adresse email de connexion"
-                           name="username" id="username" className={"form-control" + (error && " is-invalid") } onChange={handleChange}/>
-                    {error && <p className="invalid-feddback">{error}</p>}
-                </div>
-                <div className="from-group">
-                    <label htmlFor="password"></label>
-                    <input value={credentials.password} type="password" placeholder="Mot de passe" name="password"
-                           id="password" className="form-control" onChange={handleChange}/>
-                </div>
+                <Field label="Adresse email" name="username" value={credentials.username} onChange={handleChange}
+                       placeholder="Adresse email de connexion" error={error}/>
+                <Field label="Mot de passe" name="password" type="password" value={credentials.password} onChange={handleChange}
+                       placeholder="Mot de passe" error={error}/>
 
                 <div className="form-group">
                     <button type="submit" className="btn btn-success">Connexion</button>
