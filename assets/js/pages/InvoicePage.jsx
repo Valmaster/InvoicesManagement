@@ -5,6 +5,8 @@ import {Link} from "react-router-dom";
 import customersApi from "../services/customersApi";
 import axios from "axios";
 import invoicesApi from "../services/invoicesApi";
+import {toast} from "react-toastify";
+import FormContentLoader from "../components/loaders/FormContentLoader";
 
 const InvoicePage = ({history, match}) => {
 
@@ -24,19 +26,22 @@ const InvoicePage = ({history, match}) => {
 
     const [customers, setCustomers] = useState([])
     const [editing, setEditing] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const fetchInvoice = async id => {
         try {
             const data = await invoicesApi.find(id)
             const {amount, status, customer} = data;
             setInvoice({amount, status, customer: customer.id})
+            setLoading(false)
         } catch (error) {
-            history.replace('/invoices')
+            toast.error("Une erreur est survenue lors du chargement de la facture")
             setInvoice({
                 amount: "",
                 customer: "",
                 status: "SENT"
             })
+            history.replace('/invoices')
         }
     }
 
@@ -55,13 +60,13 @@ const InvoicePage = ({history, match}) => {
         try {
             const data = await customersApi.findAll()
             setCustomers(data)
-
+            setLoading(false)
             if (!invoice.customer) {
                 setInvoice({...invoice, customer: data[0]})
             }
         } catch (error) {
+            toast.error("Une erreur est survenue lors du chargement des clients.")
             history.replace('/invoices')
-            console.log(error.response)
         }
     }
 
@@ -76,8 +81,10 @@ const InvoicePage = ({history, match}) => {
         try {
             if (editing) {
                 await invoicesApi.update(id, invoice)
+                toast.success("La facture a bien été modifiée.")
             } else {
                 await invoicesApi.create(invoice)
+                toast.success("La facture a bien été enregistrée.")
                 history.replace("/invoices")
             }
         } catch (error) {
@@ -88,6 +95,7 @@ const InvoicePage = ({history, match}) => {
                 });
                 setErrors(apiErrors)
             }
+            toast.error("Des erreurs sont présentes dans votre formulaire.")
         }
 
     }
@@ -98,6 +106,8 @@ const InvoicePage = ({history, match}) => {
             && <h1>Modification d'une facture</h1>
             || <h1>Création d'une facture</h1>
             }
+            {loading && <FormContentLoader/>}
+            {!loading &&
             <form onSubmit={handleSubmit}>
                 <Field name="amount" type="number" placeholder="Montant de la facture" label="Montant"
                        onChange={handleChange} value={invoice.amount} error={errors.amount}/>
@@ -123,6 +133,7 @@ const InvoicePage = ({history, match}) => {
                     <Link to="/invoices" className="btn btn-link">Retour aux factures</Link>
                 </div>
             </form>
+            }
         </>
     )
 }

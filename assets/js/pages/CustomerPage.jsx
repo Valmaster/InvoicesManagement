@@ -2,12 +2,15 @@ import React, {useState, useEffect} from 'react';
 import Field from "../components/forms/Field";
 import {Link} from "react-router-dom";
 import customersApi from "../services/customersApi";
+import {toast} from "react-toastify";
+import FormContentLoader from "../components/loaders/FormContentLoader";
 
 const CustomerPage = ({match, history}) => {
 
     const {id = "new"} = match.params
 
     const [editing, setEditing] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const [customer, setCustomer] = useState({
         lastName: "",
@@ -28,13 +31,16 @@ const CustomerPage = ({match, history}) => {
             const data = await customersApi.find(id)
             const {firstName, lastName, email, company} = data;
             setCustomer({firstName, lastName, email, company})
+            setLoading(false)
         } catch (error) {
+            toast.error("Une erreur s'est produite lors du chargement du client.")
             history.replace("/customers")
         }
     }
 
     useEffect(() => {
         if (id !== "new") {
+            setLoading(true)
             setEditing(true)
             fetchCustomer(id)
         }
@@ -50,10 +56,13 @@ const CustomerPage = ({match, history}) => {
         e.preventDefault();
 
         try {
+            setErrors({})
             if (editing) {
-                const response = await customersApi.update(id, customer)
+                await customersApi.update(id, customer)
+                toast.success("Le client a bien été modifié.")
             } else {
-                const response = await customersApi.create(customer)
+                await customersApi.create(customer)
+                toast.success("Le client a bien été crée.")
                 history.replace("/customers")
             }
         } catch (error) {
@@ -63,6 +72,7 @@ const CustomerPage = ({match, history}) => {
                     apiErrors[violation.propertyPath] = violation.message;
                 });
                 setErrors(apiErrors)
+                toast.error("Des erreurs sont présentes dans votre formulaire.")
             }
         }
     }
@@ -74,6 +84,8 @@ const CustomerPage = ({match, history}) => {
                 && <h1>Création d'un client</h1>
                 || <h1>Modification d'un client</h1>
             }
+            {loading && <FormContentLoader/>}
+            {!loading &&
             <form onSubmit={handleSubmit}>
                 <Field name="lastName" label="Nom de famille" placeholder="Nom de famille du client"
                        value={customer.lastName}
@@ -91,6 +103,7 @@ const CustomerPage = ({match, history}) => {
                     <Link to="/customers" className="btn btn-link">Retour</Link>
                 </div>
             </form>
+            }
         </>
     )
 }

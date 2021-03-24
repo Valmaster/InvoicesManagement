@@ -4,6 +4,8 @@ import {Pagination} from "../components/Pagination";
 import moment from "moment";
 import invoicesApi from "../services/invoicesApi";
 import {Link} from "react-router-dom";
+import {toast} from "react-toastify";
+import TableLoader from "../components/loaders/TableLoaders";
 
 
 const STATUS_CLASSES = {
@@ -23,14 +25,16 @@ const InvoicesPage = props => {
     const [invoices, setInvoices] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [search, setSearch] = useState("");
+    const [loading, setLoading] = useState(true);
     const itemsPerPage = 10;
 
     const fetchInvoices = async () => {
         try {
             const data = await invoicesApi.findAll()
             setInvoices(data);
+            setLoading(false)
         } catch (error) {
-            console.log(error.response)
+            toast.error("Erreur lors du chargement des factures.")
         }
     }
 
@@ -53,8 +57,9 @@ const InvoicesPage = props => {
 
         try {
             await invoicesApi.delete(id)
+            toast.success("la facture a bien été supprimée.")
         } catch (error) {
-            console.log(error.response)
+            toast.error("Une erreur est survenue.")
             setInvoices(originalInvoices)
         }
     }
@@ -89,12 +94,13 @@ const InvoicesPage = props => {
                     <th>Actions</th>
                 </tr>
                 </thead>
+                {!loading &&
                 <tbody>
                 {paginatedInvoices.map(invoice =>
                     <tr key={invoice.id}>
                         <td>{invoice.chrono}</td>
                         <td>
-                            <a href="#">{invoice.customer.firstName} {invoice.customer.lastName}</a>
+                            <Link to={"/customers/" + invoice.customer.id}>{invoice.customer.firstName} {invoice.customer.lastName}</Link>
                         </td>
                         <td className="text-center">{formatDate(invoice.sentAt)}</td>
                         <td className="text-center">
@@ -111,7 +117,9 @@ const InvoicesPage = props => {
                     </tr>
                 )}
                 </tbody>
+                }
             </table>
+            {loading && <TableLoader/>}
 
             <Pagination currentPage={currentPage} itemsPerPage={itemsPerPage} onPageChanged={handlePageChange}
                         length={invoices.length}/>
