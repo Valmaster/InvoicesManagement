@@ -14,14 +14,14 @@ const InvoicePage = ({history, match}) => {
 
     const [invoice, setInvoice] = useState({
         amount: "",
-        customer: "",
-        status: "SENT"
+        status: "SENT",
+        customer: ""
     })
 
     const [errors, setErrors] = useState({
         amount: "",
-        customer: "",
-        status: ""
+        status: "",
+        customer: ""
     })
 
     const [customers, setCustomers] = useState([])

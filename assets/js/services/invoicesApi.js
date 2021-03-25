@@ -7,8 +7,9 @@ function findAll() {
         .then(response => response.data["hydra:member"])
 }
 
-function find() {
-    return axios.get(INVOICES_API + "/" + id)
+function find(id) {
+    return axios
+        .get(INVOICES_API + "/" + id)
         .then(response => response.data)
 }
 
