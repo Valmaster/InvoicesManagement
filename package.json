@@ -1,4 +1,10 @@
 {
+    "name": "invoicesmanagement",
+    "description": "invoicesmanagement app",
+    "version": "1.0.0",
+    "engines": {
+        "node": "12.18.1"
+    },
     "devDependencies": {
         "@babel/preset-react": "^7.0.0",
         "@symfony/stimulus-bridge": "^2.0.0",
