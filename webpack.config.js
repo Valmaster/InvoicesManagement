@@ -64,11 +64,9 @@ Encore
     //.enableTypeScriptLoader()
 
     // uncomment if you use React
-    .enableReactPreset();
+    .enableReactPreset()
 
-    Encore.configureDefinePlugin(options => {
-        options["process.env"].API_URL = process.env.API_URL
-    });
+
 
     // uncomment to get integrity="..." attributes on your script & link tags
     // requires WebpackEncoreBundle 1.4 or higher
@@ -77,5 +75,9 @@ Encore
     // uncomment if you're having problems with a jQuery plugin
     //.autoProvidejQuery()
 ;
+
+Encore.configureDefinePlugin(options => {
+    options["process.env"].API_URL = process.env.API_URL
+});
 
 module.exports = Encore.getWebpackConfig();
