@@ -5,7 +5,6 @@ import {Navbar} from "./js/components/Navbar";
 import {HomePage} from "./js/pages/HomePage";
 import {HashRouter, Switch, Route, withRouter} from "react-router-dom";
 import './css/app.css';
-import './bootstrap';
 import {CustomersPage} from "./js/pages/CustomersPage";
 import InvoicesPage from "./js/pages/InvoicesPage";
 import LoginPage from "./js/pages/LoginPage";
