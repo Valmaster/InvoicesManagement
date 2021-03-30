@@ -82,8 +82,7 @@ const InvoicePage = ({history, match}) => {
                 await invoicesApi.update(id, invoice)
                 toast.success("La facture a bien été modifiée.")
             } else {
-                console.log(invoice);
-                await invoicesApi.create(invoice)
+                const response = await invoicesApi.create(invoice)
                 toast.success("La facture a bien été enregistrée.")
                 history.replace("/invoices")
             }
@@ -95,6 +94,7 @@ const InvoicePage = ({history, match}) => {
                 });
                 setErrors(apiErrors)
             }
+            console.log(error.response)
             toast.error("Des erreurs sont présentes dans votre formulaire.")
         }
 
@@ -114,11 +114,11 @@ const InvoicePage = ({history, match}) => {
 
                 <Select name="customer" label="Client" value={invoice.customer} error={errors.customer}
                         onChange={handleChange}>
-                    {customers.map(customer =>
+                    {customers.map(customer => (
                         <option key={customer.id} value={customer.id}>
                             {customer.firstName} {customer.lastName}
                         </option>
-                    )}
+                    ))}
                 </Select>
 
                 <Select name="status" label="Status" value={invoice.status} error={errors.status}

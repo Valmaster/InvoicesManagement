@@ -22,10 +22,10 @@ function update(id, invoice) {
 }
 
 function create(invoice) {
-    axios.post(INVOICES_API,
+    return axios.post(INVOICES_API,
         {
             ...invoice,
-            customer: `/api/customers/${invoice.customer}`
+            customer: `/api/customers/${invoice.customer.id}`
         });
 }
 
