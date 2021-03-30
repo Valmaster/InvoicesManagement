@@ -3,7 +3,6 @@ import Field from "../components/forms/Field";
 import Select from "../components/forms/Select";
 import {Link} from "react-router-dom";
 import customersApi from "../services/customersApi";
-import axios from "axios";
 import invoicesApi from "../services/invoicesApi";
 import {toast} from "react-toastify";
 import FormContentLoader from "../components/loaders/FormContentLoader";
@@ -83,6 +82,7 @@ const InvoicePage = ({history, match}) => {
                 await invoicesApi.update(id, invoice)
                 toast.success("La facture a bien été modifiée.")
             } else {
+                console.log(invoice);
                 await invoicesApi.create(invoice)
                 toast.success("La facture a bien été enregistrée.")
                 history.replace("/invoices")

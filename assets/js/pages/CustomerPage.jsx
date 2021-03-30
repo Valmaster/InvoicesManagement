@@ -56,7 +56,12 @@ const CustomerPage = ({match, history}) => {
         e.preventDefault();
 
         try {
-            setErrors({})
+            setErrors({
+                lastName: "",
+                firstName: "",
+                email: "",
+                company: ""
+            })
             if (editing) {
                 await customersApi.update(id, customer)
                 toast.success("Le client a bien été modifié.")
